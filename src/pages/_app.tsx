@@ -2,6 +2,7 @@ import { globalStyles } from '@/styles/global'
 import { Metadata } from 'next'
 import type { AppProps } from 'next/app'
 import { Nunito } from 'next/font/google'
+import { SessionProvider } from 'next-auth/react'
 
 export const nunito = Nunito({ subsets: ['latin'] })
 
@@ -12,10 +13,15 @@ export const metadata: Metadata = {
 
 globalStyles()
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppProps) {
   return (
-    <div className={nunito.className}>
-      <Component {...pageProps} />
-    </div>
+    <SessionProvider session={session}>
+      <div className={nunito.className}>
+        <Component {...pageProps} />
+      </div>
+    </SessionProvider>
   )
 }
